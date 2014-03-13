@@ -1,74 +1,76 @@
 #include "Paddle.h"
 
-Paddle::Paddle()
+bool Paddle::initWithTexture(Texture2D* pTexture)
 {
-}
+    if (Sprite::initWithTexture(pTexture))
+    {
+        return true;
+    }
 
-
-Paddle::~Paddle()
-{
-}
-
-CCRect Paddle::rect()
-{
-	CCSize size = getTexture()->getContentSize();
-	return CCRectMake(-size.width / 2, -size.height / 2, size.width, size.height);
-}
-
-bool Paddle::containsTouchLocation(CCTouch* touch)
-{
-	CCPoint ccp = convertTouchToNodeSpaceAR(touch);
-	return rect().containsPoint(ccp);
-}
-
-bool Paddle::ccTouchBegan(CCTouch* touch, CCEvent* event)
-{
-	if (m_state != kPaddleStateUngrabbed) return false;
-	if (!containsTouchLocation(touch)) return false;
-
-	m_state = kPaddleStateGrabbed;
-	return true;
-}
-
-void Paddle::ccTouchMoved(CCTouch* touch, CCEvent* event)
-{
-
-}
-
-void Paddle::ccTouchEnded(CCTouch* touch, CCEvent* event)
-{
-	m_state = kPaddleStateUngrabbed;
-}
-
-bool Paddle::initWithTexture(CCTexture2D* pTexture)
-{
-	if (CCSprite::initWithTexture(pTexture))
-	{
-		m_state = kPaddleStateUngrabbed;
-	}
-
-	return true;
-}
-
-Paddle* Paddle::paddleWithTexture(CCTexture2D* pTexture)
-{
-	Paddle *pPaddle = new Paddle();
-	pPaddle->initWithTexture(pTexture); 
-	pPaddle->autorelease();
-
-	return pPaddle;
+    return false;
 }
 
 void Paddle::onEnter()
 {
-	CCDirector *pDirector = CCDirector::sharedDirector();
-	pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, false);
-	CCSprite::onEnter();
+    Sprite::onEnter();
+
+    // Register Touch Event
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);
+
+    listener->onTouchBegan = CC_CALLBACK_2(Paddle::onTouchBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(Paddle::onTouchMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(Paddle::onTouchEnded, this);
+
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
 void Paddle::onExit()
 {
-	CCDirector *pDirector = CCDirector::sharedDirector();
-	pDirector->getTouchDispatcher()->removeDelegate(this);
-	CCSprite::onExit();
+    Sprite::onExit();
 }
+
+Rect Paddle::getRect()
+{
+    Size size = getTexture()->getContentSize();
+    return Rect(-size.width / 2, -size.height / 2, size.width, size.height);
+}
+
+bool Paddle::containsTouchLocation(Touch* touch)
+{
+    return getRect().containsPoint(convertTouchToNodeSpaceAR(touch));
+}
+
+bool Paddle::onTouchBegan(Touch* touch, Event* event)
+{
+
+    if (!containsTouchLocation(touch))
+    {
+        return false;
+    }
+    return true;
+}
+
+void Paddle::onTouchMoved(Touch* touch, Event* event)
+{
+
+}
+
+void Paddle::onTouchEnded(Touch* touch, Event* event)
+{
+
+}
+
+Paddle* Paddle::paddleWithTexture(Texture2D* texture)
+{
+
+    Paddle *sprite = new Paddle();
+    if (sprite && sprite->initWithTexture(texture))
+    {
+        sprite->autorelease();
+        return sprite;
+    }
+    CC_SAFE_DELETE(sprite);
+    return nullptr;
+}
+

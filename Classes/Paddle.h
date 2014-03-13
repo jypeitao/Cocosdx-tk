@@ -4,31 +4,24 @@
 
 using namespace cocos2d;
 
-typedef enum tagPaddleState
+class Paddle: public Sprite
 {
-	kPaddleStateGrabbed,
-	kPaddleStateUngrabbed
-} PaddleState;
-
-class Paddle :
-	public CCSprite, public CCTargetedTouchDelegate
-{
-	CC_SYNTHESIZE(PaddleState, m_state, state);
 public:
-	Paddle();
-	~Paddle();
+    Paddle(){};
+    ~Paddle(){};
 
-	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
-	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
+    virtual bool initWithTexture(Texture2D* pTexture) override;
+    virtual void onEnter() override;
+    virtual void onExit() override;
 
-	virtual bool initWithTexture(CCTexture2D* pTexture);
-	static Paddle* paddleWithTexture(CCTexture2D* pTexture);
-	CCRect rect();
-	bool containsTouchLocation(CCTouch* touch);
+    Rect getRect();
+    bool containsTouchLocation(CCTouch* touch);
+    bool onTouchBegan(Touch* touch, Event* event);
+    void onTouchMoved(Touch* touch, Event* event);
+    void onTouchEnded(Touch* touch, Event* event);
 
-	virtual void onEnter();
-	virtual void onExit();
+    static Paddle* paddleWithTexture(Texture2D* pTexture);
+
 };
 
 #endif

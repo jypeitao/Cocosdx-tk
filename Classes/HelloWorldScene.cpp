@@ -1,5 +1,5 @@
 #include "HelloWorldScene.h"
-//#include "ChoiceScene.h"
+#include "ChoiceScene.h"
 
 USING_NS_CC;
 
@@ -34,7 +34,7 @@ bool HelloWorld::init()
     auto keyListener = EventListenerKeyboard::create();
     keyListener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed,this);
     keyListener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased,this);
-    getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener,this);
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener, this);
 
     auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
             CC_CALLBACK_1(HelloWorld::menuCloseCallback,this));
@@ -77,8 +77,10 @@ void HelloWorld::menuCloseCallback(Object* pSender)
 
 void HelloWorld::menuPlayGameCallback(Object* pSender)
 {
-    //Scene* pScene = ChoiceScene::scene();
-    //CCDirector::sharedDirector()->pushScene(pScene);
+    Scene* pScene = ChoiceScene::scene();
+//    Director::getInstance()->setDepthTest(true);
+
+    Director::getInstance()->pushScene(TransitionMoveInL::create(2,pScene));
     return;
 }
 

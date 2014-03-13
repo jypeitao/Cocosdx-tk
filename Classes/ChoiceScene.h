@@ -3,22 +3,20 @@
 
 #include "cocos2d.h"
 
-class ChoiceScene : public cocos2d::CCLayer
+class ChoiceScene: public cocos2d::Layer
 {
-public :
-	ChoiceScene();
-	virtual bool init();
-	CREATE_FUNC(ChoiceScene);
-	static cocos2d::CCScene *scene();
+public:
+    ChoiceScene();
+    virtual bool init();
+    //
+    CREATE_FUNC(ChoiceScene)
+    ;
+    static cocos2d::Scene *scene();
 
-	virtual void keyBackClicked(void);
-	virtual void keyMenuClicked(void);
-
-	void touchDownAction(Object* sender, unsigned int controlEvent);
+    void touchDownAction(Object* sender, unsigned int controlEvent);
 private:
-	void update();
-	int mRound;
+    void update(float f);
+    int mRound;
 };
-
 
 #endif
