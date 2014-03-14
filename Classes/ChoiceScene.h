@@ -7,15 +7,16 @@ class ChoiceScene: public cocos2d::Layer
 {
 public:
     ChoiceScene();
-    virtual bool init();
+    virtual bool init() override;
     //
     CREATE_FUNC(ChoiceScene)
     ;
     static cocos2d::Scene *scene();
 
-    void touchDownAction(Object* sender, unsigned int controlEvent);
+    void touchAction(Node *n);
 private:
-    void update(float f);
+    void update(float f) override;
+    void updateRound();
     int mRound;
 };
 

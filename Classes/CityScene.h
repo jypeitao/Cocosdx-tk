@@ -7,29 +7,31 @@ using namespace cocos2d;
 #include "Tank.h"
 #include "Panel.h"
 #include "TileMapInfo.h"
-#include "EnemyAI.h"
+//#include "EnemyAI.h"
 
-class CityScene : public CCLayer
+class CityScene: public Layer
 {
 public:
-	CityScene();
-	~CityScene();
-	virtual bool  init();
-	virtual void onEnter();
-	virtual void update(float delta);
+    CityScene();
+    ~CityScene();
+    virtual bool init() override;
+    virtual void onEnter() override;
+    virtual void update(float delta) override;
 
-	static CCScene *scene();
-	static CCScene *scene(int round);
-	CREATE_FUNC(CityScene);
-	static CityScene *create(int round);
-
-	CC_SYNTHESIZE(int, mRound, Round);
+    static Scene *scene();
+    static Scene *scene(int round);
+    //
+    CREATE_FUNC(CityScene)
+    ;
+    static CityScene *create(int round);
+    //
+CC_SYNTHESIZE(int, mRound, Round)
+    ;
 
 private:
 	Tank* mPlayerTank[2];
 	Panel* mLayerPanel;
-	EnemyAI* mEnemyAI;
+//	EnemyAI* mEnemyAI;
 };
-
 
 #endif

@@ -1,12 +1,14 @@
 #include "ChoiceScene.h"
-//#include "MyPaddle.h"
+#include "Paddle.h"
 #include "CommonValue.h"
-//#include "CityScene.h"
+#include "CityScene.h"
 
 using namespace cocos2d;
 
+#define TOTAL_ROUNDS   20
+
 ChoiceScene::ChoiceScene() :
-        mRound(1)
+                mRound(1)
 {
 
 }
@@ -80,12 +82,13 @@ bool ChoiceScene::init()
     {
         float* fSetting = fSettings[i];
         Texture2D* paddleTexture = Director::getInstance()->getTextureCache()->addImage(szImgs[i]);
-        Sprite* pPaddle = Sprite::createWithTexture(paddleTexture);
-        //MyPaddle* pPaddle = MyPaddle::paddleWithTexture(paddleTexture);
+        Paddle* pPaddle = Paddle::paddleWithTexture(paddleTexture);
         Size szBtn = pPaddle->getContentSize();
         pPaddle->setScaleX(szWin.width / szBtn.width * fSetting[0]);
         pPaddle->setScaleY(szWin.height / szBtn.height * fSetting[1]);
         pPaddle->setPosition(Point(szWin.width * fSetting[2], szWin.height * fSetting[3]));
+        pPaddle->setTag(i);
+        pPaddle->onAction = CC_CALLBACK_1(ChoiceScene::touchAction,this);
         addChild(pPaddle);
 
         //pPaddle->setpSence(this);
@@ -108,10 +111,9 @@ bool ChoiceScene::init()
     label1->setPosition(Point(szWin.width * fSetting[2], szWin.height * fSetting[3]));
     label1->setColor(color);
 //    addChild(label1, 0, evt_text);
-    addChild(label1, 0);
+    addChild(label1, 0, 4);
 
-
-    this->scheduleUpdate();
+    //this->scheduleUpdate();
     log("updat11e");
     return true;
 }
@@ -126,8 +128,35 @@ bool ChoiceScene::init()
 //
 //}
 
-void ChoiceScene::touchDownAction(Object* sender, unsigned int controlEvent)
+void ChoiceScene::touchAction(Node *n)
 {
+    switch (n->getTag())
+    {
+        case 0:
+        {
+            auto scene = CityScene::scene(mRound);
+            Director::getInstance()->replaceScene(scene);
+        }
+            break;
+        case 1:
+            if (mRound > 1)
+            {
+                mRound--;
+                updateRound();
+            }
+
+            break;
+        case 2:
+            if (mRound < TOTAL_ROUNDS)
+            {
+                mRound++;
+                updateRound();
+            }
+
+            break;
+        default:
+            break;
+    }
 //    if (controlEvent == evt_pressA)
 //    {
 //        mRound = 1 + (mRound - 1 + ROUNDS - 1) % ROUNDS;
@@ -149,9 +178,18 @@ void ChoiceScene::touchDownAction(Object* sender, unsigned int controlEvent)
 void ChoiceScene::update(float t)
 {
     char szTemp[260];
-//    LabelAtlas* label1 = (LabelAtlas*) getChildByTag(evt_text);
-//    sprintf(szTemp, "%d", mRound);
-//    label1->setString(szTemp);
+    LabelAtlas* label1 = (LabelAtlas*) getChildByTag(4);
+    sprintf(szTemp, "%d", mRound);
+    label1->setString(szTemp);
+    //log("update");
+}
+
+void ChoiceScene::updateRound()
+{
+    char szTemp[260];
+    LabelAtlas* label1 = (LabelAtlas*) getChildByTag(4);
+    sprintf(szTemp, "%d", mRound);
+    label1->setString(szTemp);
     log("update");
 }
 

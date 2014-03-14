@@ -6,10 +6,20 @@ using namespace cocos2d;
 #include "Panel.h"
 #include "TileMapInfo.h"
 #include "CommonValue.h"
+//
+//enum enumOrder
+//{
+//    cmdNothing,
+//    cmdGoUP,
+//    cmdGoRight,
+//    cmdGoDown,
+//    cmdGoLeft,
+//    cmdFire
+//};
 
 class Bullet;
 
-class Tank : public CCSprite
+class Tank : public Sprite
 {
 public :
 	Tank();
@@ -25,7 +35,7 @@ private:
 	CC_SYNTHESIZE(TileMapInfo*, mTileMapInfo, TileMapInfo);
 	CC_SYNTHESIZE(float, mBulletDelta, BulletDelta);
 	CC_SYNTHESIZE(enumObjectType, mObjType, ObjType);
-	CC_SYNTHESIZE(CCRect, mMovedRect, MovedRect);
+	CC_SYNTHESIZE(Rect, mMovedRect, MovedRect);
 	CC_SYNTHESIZE(bool, IsBlock, Block);
 };
 

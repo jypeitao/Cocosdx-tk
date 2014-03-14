@@ -5,7 +5,7 @@
 using namespace cocos2d;
 #include "Tank.h"
 
-class Bullet : public CCSprite
+class Bullet : public Sprite
 {
 public:
 	Bullet();
@@ -14,7 +14,7 @@ public:
 	static Bullet* createBulletWithTank(Tank* tank);
 	void initBulletWithTank(Tank* tank);
 	bool fire();
-	virtual void update(float delta);
+	virtual void update(float delta) override;
 	void bulletBoom();
 
 private:
@@ -23,7 +23,7 @@ private:
 	TileMapInfo* mTileMapInfo;
 	float stepX, stepY;
 
-	CC_SYNTHESIZE(CCRect, mMovedRect, MovedRect);
+	CC_SYNTHESIZE(Rect, mMovedRect, MovedRect);
 };
 
 #endif

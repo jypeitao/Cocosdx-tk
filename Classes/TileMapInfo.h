@@ -4,7 +4,7 @@
 #include <cocos2d.h>
 using namespace cocos2d;
 
-//tile类型，草地，钢铁，河流等
+
 enum enumTileType
 {
 	tileNone, tileGrass, 
@@ -12,12 +12,12 @@ enum enumTileType
 	tileRiver, tileKing 
 };
 
-//根据地图中gid获取对应tile的类型
+
 static enumTileType gidToTileType[] =
 {
 	tileNone,
 
-	tileNone, tileNone, tileGrass, tileGrass, tileSteel, tileSteel, 
+	tileNone, tileNone, tileGrass, tileGrass, tileSteel, tileSteel,
 	tileNone, tileNone, tileGrass, tileGrass, tileSteel, tileSteel,
 
 	tileWall, tileWall, tileRiver, tileRiver, tileKing, tileKing,
@@ -30,14 +30,15 @@ static enumTileType gidToTileType[] =
 class TileMapInfo
 {
 public:
-	bool collisionTest(CCRect rect);
+    virtual ~TileMapInfo(){};
+	bool collisionTest(Rect rect);
 
 	static TileMapInfo* createMapInfoWithFile(const char* tmxFile);
 	void initMapInfoWithFile(const char* tmxFile);
-	CC_SYNTHESIZE(CCTMXTiledMap*, mTMXTileMap, TileMap);
+	CC_SYNTHESIZE(TMXTiledMap*, mTMXTileMap, TileMap);
 
 private:
-	CCTMXLayer* mTMXLayers[2];
+	TMXLayer* mTMXLayers[2];
 };
 
 #endif

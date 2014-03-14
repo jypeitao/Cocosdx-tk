@@ -80,7 +80,7 @@ void HelloWorld::menuPlayGameCallback(Object* pSender)
     Scene* pScene = ChoiceScene::scene();
 //    Director::getInstance()->setDepthTest(true);
 
-    Director::getInstance()->pushScene(TransitionMoveInL::create(2,pScene));
+    Director::getInstance()->replaceScene(TransitionMoveInL::create(2,pScene));
     return;
 }
 

@@ -17,26 +17,31 @@
 
 enum enumOrder
 {
-	cmdNothing,
-	cmdGoUP,
-	cmdGoRight,
-	cmdGoDown,
-	cmdGoLeft,
-	cmdFire
+    cmdNothing,
+    cmdGoUP,
+    cmdGoRight,
+    cmdGoDown,
+    cmdGoLeft,
+    cmdFire
 };
 
-class Panel : public CCLayer
+class Panel: public Layer
 {
 public:
-	virtual bool init();
-	CREATE_FUNC(Panel);
-	enumOrder getOrder();
+    virtual bool init();
+    //
+    CREATE_FUNC(Panel)
+    ;
+    enumOrder getOrder();
+private:
+    void touchAction(Node *n);
 protected:
-	Paddle* m_pPaddleUp;
-	Paddle* m_pPaddleDown;
-	Paddle* m_pPaddleLeft;
-	Paddle* m_pPaddleRight;
-	Paddle* m_pPaddleFire;
+    Paddle* m_pPaddleUp;
+    Paddle* m_pPaddleDown;
+    Paddle* m_pPaddleLeft;
+    Paddle* m_pPaddleRight;
+    Paddle* m_pPaddleFire;
+    enumOrder order = cmdNothing;
 };
 
 #endif

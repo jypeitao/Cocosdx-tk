@@ -1,5 +1,14 @@
 #include "Paddle.h"
 
+Paddle::Paddle() :
+        onAction(nullptr)
+{
+
+}
+Paddle::~Paddle()
+{
+
+}
 bool Paddle::initWithTexture(Texture2D* pTexture)
 {
     if (Sprite::initWithTexture(pTexture))
@@ -44,6 +53,7 @@ bool Paddle::containsTouchLocation(Touch* touch)
 bool Paddle::onTouchBegan(Touch* touch, Event* event)
 {
 
+    log("began");
     if (!containsTouchLocation(touch))
     {
         return false;
@@ -53,15 +63,22 @@ bool Paddle::onTouchBegan(Touch* touch, Event* event)
 
 void Paddle::onTouchMoved(Touch* touch, Event* event)
 {
-
+    log("move");
 }
 
 void Paddle::onTouchEnded(Touch* touch, Event* event)
 {
-
+    log("end");
+    if (containsTouchLocation(touch))
+    {
+        if (onAction != nullptr)
+        {
+            onAction(this);
+        }
+    }
 }
 
-Paddle* Paddle::paddleWithTexture(Texture2D* texture)
+Paddle * Paddle::paddleWithTexture(Texture2D * texture)
 {
 
     Paddle *sprite = new Paddle();
