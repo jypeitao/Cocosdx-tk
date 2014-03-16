@@ -7,7 +7,7 @@ using namespace cocos2d;
 #include "Tank.h"
 #include "Panel.h"
 #include "TileMapInfo.h"
-//#include "EnemyAI.h"
+#include "EnemyAI.h"
 
 class CityScene: public Layer
 {
@@ -31,7 +31,7 @@ CC_SYNTHESIZE(int, mRound, Round)
 private:
 	Tank* mPlayerTank[2];
 	Panel* mLayerPanel;
-//	EnemyAI* mEnemyAI;
+	EnemyAI* mEnemyAI;
 };
 
 #endif

@@ -5,35 +5,35 @@
 using namespace cocos2d;
 #include "Tank.h"
 
-static const char* enemyTankType[] = 
+static const char* enemyTankType[] =
 {
-	"normalU.png", "speedU.png", "armor1U.png"
-};
+    "normalU.png",
+    "speedU.png",
+    "armor1U.png" };
 
 class EnemyAI
 {
 public:
-	EnemyAI();
-	~EnemyAI();
+    EnemyAI();
+    ~EnemyAI();
 
-	static EnemyAI* createEnemyAIWithTank(Tank* tank);
-	void initEnemyAIWithTank(Tank* tank);
-	void update(float delta);
+    static EnemyAI* createEnemyAIWithTank(Tank* tank);
+    void initEnemyAIWithTank(Tank* tank);
+    void update(float delta);
 
-	void collisionTest();
-	bool IsRectIntersect(CCRect rectA, CCRect rectB);
-
-private:
-	void addTank(float delta);
-	void tankAction(float delta);
+    void collisionTest();
+    bool IsRectIntersect(Rect rectA, Rect rectB);
 
 private:
-	CCArray* mEnemyTanks;
-	Tank* mTank;
-	TileMapInfo* mTileMapInfo;
+    void addTank(float delta);
+    void tankAction(float delta);
 
-	//出现地点
-	CCPoint bornPoint[3];
+private:
+    __Array* mEnemyTanks;
+    Tank* mTank;
+    TileMapInfo* mTileMapInfo;
+
+    Point bornPoint[3];
 };
 
 #endif

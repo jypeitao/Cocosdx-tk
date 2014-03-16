@@ -50,6 +50,7 @@ set(GAME_SRC
 ./Classes/Tank.cpp
 ./Classes/Bullet.cpp
 ./Classes/Panel.cpp
+./Classes/EnemyAI.cpp
 
 )
 

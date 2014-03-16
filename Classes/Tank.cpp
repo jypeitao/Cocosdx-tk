@@ -2,11 +2,7 @@
 #include "Bullet.h"
 
 Tank::Tank() :
-                mBullet(NULL),
-                mTileMapInfo(NULL),
-                mBulletDelta(0.0),
-                mObjType(PlayerTank),
-                IsBlock(false)
+        mBullet(NULL), mTileMapInfo(NULL), mBulletDelta(0.0), mObjType(PlayerTank), IsBlock(false)
 
 {
 
@@ -56,19 +52,19 @@ bool Tank::command(enumOrder order)
         case cmdNothing:
             break;
         case cmdGoUP:
-            stepY = 1.0f;
+            stepY = 2.0f;
             fRotation = 0.0f;
             break;
         case cmdGoDown:
-            stepY = -1.0f;
+            stepY = -2.0f;
             fRotation = 180.0f;
             break;
         case cmdGoLeft:
-            stepX = -1.0f;
+            stepX = -2.0f;
             fRotation = 270.0f;
             break;
         case cmdGoRight:
-            stepX = 1.0f;
+            stepX = 2.0f;
             fRotation = 90.0f;
             break;
         case cmdFire:
@@ -83,7 +79,7 @@ bool Tank::command(enumOrder order)
     Rect rect = this->getBoundingBox();
     mMovedRect = Rect(rect.getMinX() + stepX, rect.getMinY() + stepY, rect.size.width,
             rect.size.height);
-
+    //setPosition(Point(mMovedRect.getMidX(), mMovedRect.getMidY()));
     if (!mTileMapInfo->collisionTest(mMovedRect))
     {
         IsBlock = false;
@@ -92,6 +88,16 @@ bool Tank::command(enumOrder order)
 
     mMovedRect = rect;
     IsBlock = true;
+
+//    Rect rect = this->getBoundingBox();
+//    if (!mTileMapInfo->collisionTest(
+//            Rect(rect.getMinX() + stepX, rect.getMinY() + stepY, rect.size.width,
+//                    rect.size.height)))
+//    {
+//        setPositionX(getPositionX() + stepX);
+//        setPositionY(getPositionY() + stepY);
+//        return true;
+//    }
 
     return false;
 }

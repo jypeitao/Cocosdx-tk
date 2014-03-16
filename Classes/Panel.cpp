@@ -62,7 +62,7 @@ bool Panel::init()
             m_pPaddleLeft,
             m_pPaddleRight,
             m_pPaddleFire };
-    for (int i = 0; i < (sizeof(paddle) / sizeof(paddle[0])); ++i)
+    for (size_t i = 0; i < sizeof(paddle) / sizeof(paddle[0]); ++i)
     {
         addChild(paddle[i]);
         paddle[i]->setPosition(Point(localX[i], localY[i]));
@@ -98,6 +98,8 @@ void Panel::touchAction(Node *n)
 }
 enumOrder Panel::getOrder()
 {
-    return order;
+    enumOrder t = order;
+    order = cmdNothing;
+    return t;
 }
 

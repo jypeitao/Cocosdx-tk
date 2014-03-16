@@ -2,8 +2,8 @@
 
 CityScene::CityScene() :
                 mRound(1),
-                mLayerPanel(NULL)
-//                mEnemyAI(nullptr)
+                mLayerPanel(NULL),
+                mEnemyAI(nullptr)
 {
     mPlayerTank[0] = NULL;
     mPlayerTank[1] = NULL;
@@ -38,7 +38,7 @@ bool CityScene::init()
     mLayerPanel = Panel::create();
     addChild(mLayerPanel, 3);
 //
-//    mEnemyAI = EnemyAI::createEnemyAIWithTank(mPlayerTank[0]);
+    mEnemyAI = EnemyAI::createEnemyAIWithTank(mPlayerTank[0]);
 
     return true;
 }
@@ -94,5 +94,5 @@ void CityScene::update(float delta)
     if (mPlayerTank[0] != NULL)
         mPlayerTank[0]->command(mLayerPanel->getOrder());
 //
-//    mEnemyAI->update(delta);
+    mEnemyAI->update(delta);
 }

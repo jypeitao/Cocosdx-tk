@@ -66,14 +66,14 @@ bool Bullet::fire()
 
 void Bullet::bulletBoom()
 {
-    Rect rect = boundingBox();
+    Rect rect = getBoundingBox();
     Size mapSize = mTileMapInfo->getTileMap()->getContentSize();
 
     if (rect.getMinX() < 0 || rect.getMaxX() >= mapSize.width || rect.getMinY() < 0
             || rect.getMaxY() >= mapSize.height)
         return;
 
-    TMXLayer* tmxLayer = mTileMapInfo->getTileMap()->layerNamed("layer_0");
+    TMXLayer* tmxLayer = mTileMapInfo->getTileMap()->getLayer("layer_0");
     Size tileSize = tmxLayer->getMapTileSize();
 
 
@@ -104,7 +104,7 @@ void Bullet::update(float delta)
 
     setPosition(Point(getPositionX() + stepX, getPositionY() + stepY));
 
-    Rect rect = boundingBox();
+    Rect rect = getBoundingBox();
     if (mTileMapInfo->collisionTest(rect))
     {
         unscheduleUpdate();

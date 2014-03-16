@@ -1,6 +1,9 @@
 #include "EnemyAI.h"
 
-EnemyAI::EnemyAI()
+EnemyAI::EnemyAI() :
+        mEnemyTanks(NULL),
+        mTank(NULL),
+        mTileMapInfo(NULL)
 {
 
 }
@@ -12,141 +15,133 @@ EnemyAI::~EnemyAI()
 
 EnemyAI* EnemyAI::createEnemyAIWithTank(Tank* tank)
 {
-	EnemyAI* enemyTank = new EnemyAI();
-	enemyTank->initEnemyAIWithTank(tank);
+    EnemyAI* enemyTank = new EnemyAI();
+    enemyTank->initEnemyAIWithTank(tank);
 
-	return enemyTank;
+    return enemyTank;
 }
 
 void EnemyAI::initEnemyAIWithTank(Tank* tank)
 {
-	mTank = tank;
-	mTileMapInfo = tank->getTileMapInfo();
-	mEnemyTanks = CCArray::createWithCapacity(4);
-	mEnemyTanks->retain();
+    mTank = tank;
+    mTileMapInfo = tank->getTileMapInfo();
+    mEnemyTanks = Array::createWithCapacity(4);
+    mEnemyTanks->retain();
 
-	//初始化出现地点
-	CCSize mapSize = mTileMapInfo->getTileMap()->getContentSize();
-	CCSize tileSize = mTileMapInfo->getTileMap()->layerNamed("layer_0")->getMapTileSize();
-	bornPoint[0] = ccp(tileSize.width, mapSize.height - tileSize.height);
-	bornPoint[1] = ccp(mapSize.width / 2, mapSize.height - tileSize.height);
-	bornPoint[2] = ccp(mapSize.width - tileSize.width, mapSize.height - tileSize.height);
+    Size mapSize = mTileMapInfo->getTileMap()->getContentSize();
+    Size tileSize = mTileMapInfo->getTileMap()->getLayer("layer_0")->getMapTileSize();
+    bornPoint[0] = Point(tileSize.width, mapSize.height - tileSize.height);
+    bornPoint[1] = Point(mapSize.width / 2, mapSize.height - tileSize.height);
+    bornPoint[2] = Point(mapSize.width - tileSize.width, mapSize.height - tileSize.height);
 }
 
 void EnemyAI::update(float delta)
 {
-	//坦克不足4个，补充坦克
-	addTank(delta);
+    addTank(delta);
 
-	//坦克行为控制
-	tankAction(delta);
+    tankAction(delta);
 }
 
 void EnemyAI::addTank(float delta)
 {
-	static float deltaTimes = 0.0f;
-	deltaTimes += delta;
-	if (deltaTimes >= 2.0f)
-	{
-		deltaTimes = 0.0f;
-		int count = mEnemyTanks->count();
-		if (count < 3)	//先从固定位置添加三个坦克
-		{
-			Tank* enemyTank = Tank::createTankWithTankType(enemyTankType[count], mTileMapInfo);
-			enemyTank->setPosition(bornPoint[count]);
-			enemyTank->setRotation(180.0f);
-			mEnemyTanks->addObject(enemyTank);
-		}
-		else if (count == 3)	//第四个坦克随机添加
-		{
-			int tankTypeIndex = (int)(CCRANDOM_0_1() * 4) % 3;
-			Tank* enemyTank = Tank::createTankWithTankType(enemyTankType[tankTypeIndex], mTileMapInfo);
-			enemyTank->setPosition(bornPoint[tankTypeIndex]);
-			enemyTank->setRotation(180.0f);
-			mEnemyTanks->addObject(enemyTank);
-		}
-	}
+    static float deltaTimes = 0.0f;
+    deltaTimes += delta;
+    if (deltaTimes >= 2.0f)
+    {
+        deltaTimes = 0.0f;
+        int count = mEnemyTanks->count();
+        if (count < 3)
+        {
+            Tank* enemyTank = Tank::createTankWithTankType(enemyTankType[count], mTileMapInfo);
+            enemyTank->setPosition(bornPoint[count]);
+            enemyTank->setRotation(180.0f);
+            mEnemyTanks->addObject(enemyTank);
+        }
+        else if (count == 3)
+        {
+            int tankTypeIndex = (int) (CCRANDOM_0_1() * 4) % 3;
+            Tank* enemyTank = Tank::createTankWithTankType(enemyTankType[tankTypeIndex],
+                    mTileMapInfo);
+            enemyTank->setPosition(bornPoint[tankTypeIndex]);
+            enemyTank->setRotation(180.0f);
+            mEnemyTanks->addObject(enemyTank);
+        }
+    }
 }
 
 void EnemyAI::tankAction(float delta)
 {
-	CCObject* pObj;
-	CCARRAY_FOREACH(mEnemyTanks, pObj)
-	{
-		Tank* tank = (Tank*)pObj;
+    Object* pObj;
+    CCARRAY_FOREACH(mEnemyTanks, pObj)
+    {
+        Tank* tank = (Tank*) pObj;
 
-		//坦克按照上次的方向一直往前走
-		int Rotation = tank->getRotation();
-		tank->command((enumOrder)(Rotation / 90 + 1));
+        int Rotation = tank->getRotation();
+        tank->command((enumOrder) (Rotation / 90 + 1));
 
-		//坦克每隔一秒开一次火
-		tank->setBulletDelta(tank->getBulletDelta() + delta);
-		if (tank->getBulletDelta() > 1)
-		{
-			//开火后，如果子弹在飞行中，归零计时
-			if (tank->command(cmdFire))
-			{
-				tank->setBulletDelta(0.0);
-			}
-		}
+        tank->setBulletDelta(tank->getBulletDelta() + delta);
+        if (tank->getBulletDelta() > 1)
+        {
 
-		//检测坦克之间的碰撞
-		collisionTest();
+            if (tank->command(cmdFire))
+            {
+                tank->setBulletDelta(0.0);
+            }
+        }
 
-		//如果坦克阻塞，换个方向
-		if (tank->getBlock())
-			tank->setRotation((int)(CCRANDOM_0_1() * 3.2) * 90);
-		//如果上面的判断完成后，坦克根据自己的阻塞状态移动
-		tank->move();
-	}
-	mTank->move();
+        collisionTest();
+
+        if (tank->getBlock())
+            tank->setRotation((int) (CCRANDOM_0_1() * 3.2) * 90);
+
+        tank->move();
+    }
+    mTank->move();
 }
 
 void EnemyAI::collisionTest()
 {
-	//坦克和敌方坦克之间的碰撞检测
-	CCObject* pObj;
-	CCARRAY_FOREACH(mEnemyTanks, pObj)
-	{
-		Tank* enemyTank = (Tank*)pObj;
-		if (IsRectIntersect(mTank->getMovedRect(), enemyTank->getMovedRect()))
-		{
-			enemyTank->setBlock(true);
-			mTank->setBlock(true);
-		}
-	}
+    Object* pObj;
+    CCARRAY_FOREACH(mEnemyTanks, pObj)
+    {
+        Tank* enemyTank = (Tank*) pObj;
+        if (IsRectIntersect(mTank->getMovedRect(), enemyTank->getMovedRect()))
+        {
+            enemyTank->setBlock(true);
+            mTank->setBlock(true);
+        }
+    }
 
-	//敌方坦克之间的碰撞
-	CCArray* ccTmpArray = CCArray::create();
-	ccTmpArray->addObjectsFromArray(mEnemyTanks);
-	while (ccTmpArray->count())
-	{
-		CCObject* pObj;
-		Tank* tmpTank = (Tank*)ccTmpArray->lastObject();
-		ccTmpArray->removeLastObject();
-		CCARRAY_FOREACH(ccTmpArray, pObj)
-		{
-			if (IsRectIntersect(tmpTank->getMovedRect(), ((Tank*)pObj)->getMovedRect()))
-			{
-				tmpTank->setBlock(true);
-				((Tank*)pObj)->setBlock(true);
-				ccTmpArray->removeObject(pObj);
-			}
-		}
-	}
+    __Array* ccTmpArray = __Array::create();
+    ccTmpArray->addObjectsFromArray(mEnemyTanks);
+    while (ccTmpArray->count())
+    {
+        Object* pObj;
+        Tank* tmpTank = (Tank*) ccTmpArray->getLastObject();
+        ccTmpArray->removeLastObject();
+        CCARRAY_FOREACH(ccTmpArray, pObj)
+        {
+            if (IsRectIntersect(tmpTank->getMovedRect(), ((Tank*) pObj)->getMovedRect()))
+            {
+                tmpTank->setBlock(true);
+                ((Tank*) pObj)->setBlock(true);
+                ccTmpArray->removeObject(pObj);
+            }
+        }
+    }
 }
 
-bool EnemyAI::IsRectIntersect(CCRect rectA, CCRect rectB)
+bool EnemyAI::IsRectIntersect(Rect rectA, Rect rectB)
 {
-	float left = max(rectA.getMinX(), rectB.getMinX());
-	float right = min(rectA.getMaxX(), rectB.getMaxX());
-	if (left > right)
-		return false;
+    float left = std::max(rectA.getMinX(), rectB.getMinX());
+    float right = std::min(rectA.getMaxX(), rectB.getMaxX());
+    if (left > right)
+        return false;
 
-	float top = min(rectA.getMaxY(), rectB.getMaxY());
-	float bottom = max(rectA.getMinY(), rectB.getMinY());
-	if (top < bottom)
-		return false;
+    float top = std::min(rectA.getMaxY(), rectB.getMaxY());
+    float bottom = std::max(rectA.getMinY(), rectB.getMinY());
+    if (top < bottom)
+        return false;
 
-	return true;
+    return true;
 }
