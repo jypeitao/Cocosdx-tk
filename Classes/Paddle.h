@@ -13,6 +13,7 @@ public:
     virtual bool initWithTexture(Texture2D* pTexture) override;
     virtual void onEnter() override;
     virtual void onExit() override;
+    void update(float fDelta) override;
 
     Rect getRect();
     bool containsTouchLocation(Touch* touch);
@@ -24,6 +25,9 @@ public:
 
 public:
     std::function<void(Node *)> onAction;
+
+CC_SYNTHESIZE(bool, longTouch, LongTouch)
+    ;
 
 };
 

@@ -89,6 +89,7 @@ bool ChoiceScene::init()
         pPaddle->setPosition(Point(szWin.width * fSetting[2], szWin.height * fSetting[3]));
         pPaddle->setTag(i);
         pPaddle->onAction = CC_CALLBACK_1(ChoiceScene::touchAction,this);
+        pPaddle->setLongTouch(false);
         addChild(pPaddle);
 
         //pPaddle->setpSence(this);

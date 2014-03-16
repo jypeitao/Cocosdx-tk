@@ -44,16 +44,16 @@ bool Bullet::fire()
         switch (Rotation)
         {
             case 0:
-                stepX = 0.0f, stepY = 2.0f;
+                stepX = 0.0f, stepY = 4.0f;
                 break;
             case 90:
-                stepX = 2.0f, stepY = 0.0f;
+                stepX = 4.0f, stepY = 0.0f;
                 break;
             case 180:
-                stepX = 0.0f, stepY = -2.0f;
+                stepX = 0.0f, stepY = -4.0f;
                 break;
             case 270:
-                stepX = -2.0f, stepY = 0.0f;
+                stepX = -4.0f, stepY = 0.0f;
                 break;
             default:
                 break;

@@ -1,7 +1,8 @@
 #include "Paddle.h"
 
 Paddle::Paddle() :
-        onAction(nullptr)
+        onAction(nullptr),
+        longTouch(true)
 {
 
 }
@@ -58,12 +59,21 @@ bool Paddle::onTouchBegan(Touch* touch, Event* event)
     {
         return false;
     }
+    if (longTouch)
+    {
+        scheduleUpdate();
+    }
+
     return true;
 }
 
 void Paddle::onTouchMoved(Touch* touch, Event* event)
 {
     log("move");
+    if (longTouch && !containsTouchLocation(touch))
+    {
+        unscheduleUpdate();
+    }
 }
 
 void Paddle::onTouchEnded(Touch* touch, Event* event)
@@ -76,6 +86,21 @@ void Paddle::onTouchEnded(Touch* touch, Event* event)
             onAction(this);
         }
     }
+    if (longTouch)
+    {
+        unscheduleUpdate();
+    }
+
+}
+
+void Paddle::update(float fDelta)
+{
+    Sprite::update(fDelta);
+    if (onAction != nullptr)
+    {
+        onAction(this);
+    }
+
 }
 
 Paddle * Paddle::paddleWithTexture(Texture2D * texture)

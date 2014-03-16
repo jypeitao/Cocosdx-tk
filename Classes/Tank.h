@@ -19,24 +19,25 @@ using namespace cocos2d;
 
 class Bullet;
 
-class Tank : public Sprite
+class Tank: public Sprite
 {
-public :
-	Tank();
-	~Tank();
+public:
+    Tank();
+    ~Tank();
 
-	static Tank* createTankWithTankType(const char* tankTypeName, TileMapInfo* tileMapInfo);
-	void initTankWithTankType(const char* tankTypeName, TileMapInfo* tileMapInfo);
-	bool command(enumOrder order);
-	void move();
-	
+    static Tank* createTankWithTankType(const char* tankTypeName, TileMapInfo* tileMapInfo);
+    void initTankWithTankType(const char* tankTypeName, TileMapInfo* tileMapInfo);
+    bool command(enumOrder order);
+    void move();
+
 private:
-	CC_SYNTHESIZE(Bullet*, mBullet, Bullet);
-	CC_SYNTHESIZE(TileMapInfo*, mTileMapInfo, TileMapInfo);
-	CC_SYNTHESIZE(float, mBulletDelta, BulletDelta);
-	CC_SYNTHESIZE(enumObjectType, mObjType, ObjType);
-	CC_SYNTHESIZE(Rect, mMovedRect, MovedRect);
-	CC_SYNTHESIZE(bool, IsBlock, Block);
+CC_SYNTHESIZE(Bullet*, mBullet, Bullet)
+    ;CC_SYNTHESIZE(TileMapInfo*, mTileMapInfo, TileMapInfo)
+    ;CC_SYNTHESIZE(float, mBulletDelta, BulletDelta)
+    ;CC_SYNTHESIZE(enumObjectType, mObjType, ObjType)
+    ;CC_SYNTHESIZE(Rect, mMovedRect, MovedRect)
+    ;CC_SYNTHESIZE(bool, IsBlock, Block)
+    ;
 };
 
 #endif
