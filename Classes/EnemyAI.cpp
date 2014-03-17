@@ -105,7 +105,7 @@ void EnemyAI::collisionTest()
     CCARRAY_FOREACH(mEnemyTanks, pObj)
     {
         Tank* enemyTank = (Tank*) pObj;
-        if (IsRectIntersect(mTank->getMovedRect(), enemyTank->getMovedRect()))
+        if (mTank->getMovedRect().intersectsRect(enemyTank->getMovedRect()))
         {
             enemyTank->setBlock(true);
             mTank->setBlock(true);
@@ -121,7 +121,7 @@ void EnemyAI::collisionTest()
         ccTmpArray->removeLastObject();
         CCARRAY_FOREACH(ccTmpArray, pObj)
         {
-            if (IsRectIntersect(tmpTank->getMovedRect(), ((Tank*) pObj)->getMovedRect()))
+            if (tmpTank->getMovedRect().intersectsRect(((Tank*) pObj)->getMovedRect()))
             {
                 tmpTank->setBlock(true);
                 ((Tank*) pObj)->setBlock(true);
@@ -131,17 +131,3 @@ void EnemyAI::collisionTest()
     }
 }
 
-bool EnemyAI::IsRectIntersect(Rect rectA, Rect rectB)
-{
-    float left = std::max(rectA.getMinX(), rectB.getMinX());
-    float right = std::min(rectA.getMaxX(), rectB.getMaxX());
-    if (left > right)
-        return false;
-
-    float top = std::min(rectA.getMaxY(), rectB.getMaxY());
-    float bottom = std::max(rectA.getMinY(), rectB.getMinY());
-    if (top < bottom)
-        return false;
-
-    return true;
-}

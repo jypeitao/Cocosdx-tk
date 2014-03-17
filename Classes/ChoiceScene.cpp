@@ -111,6 +111,8 @@ bool ChoiceScene::init()
     label1->setScaleY(szWin.height / sz.height * fSetting[1]);
     label1->setPosition(Point(szWin.width * fSetting[2], szWin.height * fSetting[3]));
     label1->setColor(color);
+    label1->updateAtlasValues();
+    //updateAtlasValues
 //    addChild(label1, 0, evt_text);
     addChild(label1, 0, 4);
 
@@ -181,7 +183,7 @@ void ChoiceScene::update(float t)
     char szTemp[260];
     LabelAtlas* label1 = (LabelAtlas*) getChildByTag(4);
     sprintf(szTemp, "%d", mRound);
-    label1->setString(szTemp);
+    //label1->setString(szTemp);
     //log("update");
 }
 

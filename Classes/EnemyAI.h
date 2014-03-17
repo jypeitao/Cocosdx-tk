@@ -22,7 +22,7 @@ public:
     void update(float delta);
 
     void collisionTest();
-    bool IsRectIntersect(Rect rectA, Rect rectB);
+
 
 private:
     void addTank(float delta);
